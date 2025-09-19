@@ -1,24 +1,30 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Job;
 
+// Homepage
 Route::get('/', function () {
     return view('home', [
         'title' => 'Home',
-        'heading' => 'Welcome to our OpportuNet',
+        'heading' => 'Welcome to OpportuNet 🤖',
     ]);
 });
 
-Route::get('/about', function () {
-    return view('about', [
-        'title' => 'About',
-        'heading' => 'About Us',
+// All Jobs
+Route::get('/jobs', function () {
+    return view('jobs', [
+        'title' => 'Jobs',
+        'heading' => 'Available Jobs',
+        'jobs' => Job::all(),
     ]);
 });
 
-Route::get('/contact', function () {
-    return view('contact', [
-        'title' => 'Contact',
-        'heading' => 'Contact Us',
+// Single Job (dynamic by ID)
+Route::get('/jobs/{id}', function ($id) {
+    return view('job', [
+        'title' => 'Job Details',
+        'heading' => 'Job Information',
+        'job' => Job::find($id),
     ]);
 });
