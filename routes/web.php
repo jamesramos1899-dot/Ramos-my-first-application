@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Job;
 
-// Homepage
 Route::get('/', function () {
     return view('home', [
         'title' => 'Home',
@@ -11,20 +10,20 @@ Route::get('/', function () {
     ]);
 });
 
-// All Jobs
+// Fetch all jobs from DB
 Route::get('/jobs', function () {
     return view('jobs', [
         'title' => 'Jobs',
         'heading' => 'Available Jobs',
-        'jobs' => Job::all(),
+        'jobs' => Job::with('employer')->get(),
     ]);
 });
 
-// Single Job (dynamic by ID)
+// Fetch single job by ID
 Route::get('/jobs/{id}', function ($id) {
     return view('job', [
         'title' => 'Job Details',
         'heading' => 'Job Information',
-        'job' => Job::find($id),
+        'job' => Job::with('employer')->findOrFail($id),
     ]);
 });
