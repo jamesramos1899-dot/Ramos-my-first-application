@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('employers', function (Blueprint $table) {
+        Schema::create('job_listing_tag', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('job_listing_id')->constrained('job_listings')->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained('tags')->cascadeOnDelete();
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('employers');
+        Schema::dropIfExists('job_listing_tag');
     }
 };

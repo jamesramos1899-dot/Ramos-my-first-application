@@ -15,7 +15,7 @@ Route::get('/jobs', function () {
     return view('jobs', [
         'title' => 'Jobs',
         'heading' => 'Available Jobs',
-        'jobs' => Job::with('employer')->get(),
+        'jobs' => Job::with(['employer', 'tags'])->get(),
     ]);
 });
 
@@ -24,6 +24,6 @@ Route::get('/jobs/{id}', function ($id) {
     return view('job', [
         'title' => 'Job Details',
         'heading' => 'Job Information',
-        'job' => Job::with('employer')->findOrFail($id),
+        'job' => Job::with(['employer', 'tags'])->findOrFail($id),
     ]);
 });
