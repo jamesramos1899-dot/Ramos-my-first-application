@@ -9,19 +9,16 @@ class Job extends Model
 {
     use HasFactory;
 
-    
-    protected $table = 'job_listings';
-
-    protected $fillable = ['title', 'salary', 'employer_id'];
+    // This model uses the `jobs` table (default by convention)
+    protected $fillable = [
+        'title',
+        'description',
+        'salary',
+        'employer_id',
+    ];
 
     public function employer()
     {
         return $this->belongsTo(Employer::class);
-    }
-
-    public function tags()
-    {
-        
-        return $this->belongsToMany(Tag::class, 'job_listing_tag', 'job_listing_id', 'tag_id');
     }
 }
