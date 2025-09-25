@@ -10,16 +10,15 @@ Route::get('/', function () {
     ]);
 });
 
-// Fetch all jobs from DB
 Route::get('/jobs', function () {
     return view('jobs', [
         'title' => 'Jobs',
         'heading' => 'Available Jobs',
-        'jobs' => Job::with(['employer', 'tags'])->get(),
+        // ✅ Use eager loading for employer and tags
+        'jobs' => Job::with(['employer', 'tags'])->paginate(10), // <- Pagination added
     ]);
 });
 
-// Fetch single job by ID
 Route::get('/jobs/{id}', function ($id) {
     return view('job', [
         'title' => 'Job Details',
