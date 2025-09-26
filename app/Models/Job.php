@@ -9,7 +9,6 @@ class Job extends Model
 {
     use HasFactory;
 
-    // This model uses the `jobs` table (default by convention)
     protected $fillable = [
         'title',
         'description',
