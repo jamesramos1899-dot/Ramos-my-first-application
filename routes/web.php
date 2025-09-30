@@ -5,8 +5,7 @@ use App\Http\Controllers\JobController;
 
 // Home page
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('jobs.index');
 });
 
-// All 7 CRUD routes for jobs in one line
 Route::resource('jobs', JobController::class);

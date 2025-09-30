@@ -8,68 +8,68 @@ use Illuminate\Http\Request;
 
 class JobController extends Controller
 {
-    // Show all jobs
+    // Show all jobs (Read - list)
     public function index()
     {
-        $jobs = Job::with('employer')->get();
-        return view('jobs.index', ['jobs' => $jobs]);
+        // Fetch all jobs with their employer
+        $jobs = Job::with('employer')->paginate(10);
+        return view('jobs.index', compact('jobs'));
     }
 
-    // Show create form
+    // Show a single job (Read - detail)
+    public function show(Job $job)
+    {
+        return view('jobs.show', compact('job'));
+    }
+
+    // Show create form (Create - form)
     public function create()
     {
-        return view('jobs.create');
+        // Fetch all employers for dropdown
+        $employers = Employer::all();
+        return view('jobs.create', compact('employers'));
     }
 
-    // Store a new job
+    // Store a new job (Create - save)
     public function store(Request $request)
     {
         $data = $request->validate([
             'title'       => ['required', 'min:3'],
             'salary'      => ['required'],
-            'description' => ['nullable', 'string'],
+            'employer_id' => ['required', 'exists:employers,id'],
         ]);
 
-        // make sure employer exists
-        $employer = Employer::firstOrCreate(['name' => 'Default Employer']);
+        Job::create($data);
 
-        Job::create(array_merge($data, [
-            'employer_id' => $employer->id,
-        ]));
-
-        return redirect()->route('jobs.index');
+        return redirect()->route('jobs.index')->with('success', 'Job created successfully!');
     }
 
-    // Show single job
-    public function show(Job $job)
-    {
-        return view('jobs.show', ['job' => $job]);
-    }
-
-    // Show edit form
+    // Show edit form (Update - form)
     public function edit(Job $job)
     {
-        return view('jobs.edit', ['job' => $job]);
+        $employers = Employer::all();
+        return view('jobs.edit', compact('job', 'employers'));
     }
 
-    // Update existing job
+    // Update existing job (Update - save)
     public function update(Request $request, Job $job)
     {
         $data = $request->validate([
             'title'       => ['required', 'min:3'],
             'salary'      => ['required'],
-            'description' => ['nullable', 'string'],
+            'employer_id' => ['required', 'exists:employers,id'],
         ]);
 
         $job->update($data);
 
-        return redirect()->route('jobs.show', $job);
+        return redirect()->route('jobs.show', $job)->with('success', 'Job updated successfully!');
     }
 
-    // Delete job
+    // Delete a job (Delete)
     public function destroy(Job $job)
     {
         $job->delete();
-        return redirect()->route('jobs.index');
+
+        return redirect()->route('jobs.index')->with('success', 'Job deleted successfully!');
     }
 }

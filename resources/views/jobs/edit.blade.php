@@ -1,29 +1,53 @@
-<x-layout title="Edit Job">
-    <h1 class="text-2xl font-bold mb-6">Edit Job</h1>
+<x-layout>
+    <x-slot:heading>Edit Job</x-slot:heading>
 
-    <form action="/jobs/{{ $job->id }}" method="POST" class="space-y-4">
+    {{-- Update Form --}}
+    <form action="{{ route('jobs.update', $job->id) }}" method="POST" class="mb-6">
         @csrf
         @method('PUT')
 
-        <div>
-            <label class="block text-gray-200">Job Title</label>
-            <input type="text" name="title" value="{{ old('title', $job->title) }}"
-                   class="w-full rounded border-gray-700 bg-gray-800 text-white">
+        <div class="mb-4">
+            <label class="block text-black">Title</label>
+            <input type="text" name="title"
+                   value="{{ old('title', $job->title) }}" required
+                   class="border rounded px-3 py-2 w-full text-black">
         </div>
 
-        <div>
-            <label class="block text-gray-200">Description</label>
-            <textarea name="description" class="w-full rounded border-gray-700 bg-gray-800 text-white">{{ old('description', $job->description) }}</textarea>
+        <div class="mb-4">
+            <label class="block text-black">Salary</label>
+            <input type="text" name="salary"
+                   value="{{ old('salary', $job->salary) }}" required
+                   class="border rounded px-3 py-2 w-full text-black">
         </div>
 
-        <div>
-            <label class="block text-gray-200">Salary</label>
-            <input type="number" name="salary" value="{{ old('salary', $job->salary) }}"
-                   class="w-full rounded border-gray-700 bg-gray-800 text-white">
+        <div class="mb-4">
+            <label class="block text-black">Employer</label>
+            <select name="employer_id" required
+                    class="border rounded px-3 py-2 w-full text-black">
+                @foreach($employers as $employer)
+                    <option value="{{ $employer->id }}"
+                            {{ $job->employer_id == $employer->id ? 'selected' : '' }}>
+                        {{ $employer->name }}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
-        <button type="submit" class="bg-blue-600 px-4 py-2 rounded text-white hover:bg-blue-500">
+        <button type="submit"
+                class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">
             Update Job
+        </button>
+    </form>
+
+    {{-- Delete Form --}}
+    <form action="{{ route('jobs.destroy', $job->id) }}" method="POST"
+          onsubmit="return confirm('Are you sure you want to delete this job?')">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit"
+                class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500">
+            Delete Job
         </button>
     </form>
 </x-layout>
