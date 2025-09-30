@@ -14,14 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Make sure tags exist first
-        $tags = Tag::all();
+        $tags = \App\Models\Tag::factory(10)->create();
 
-        Job::factory(20)->create()->each(function ($job) use ($tags) {
-            $job->tags()->attach($tags->random(2));
+        \App\Models\Job::factory(20)->create()->each(function($job) use ($tags) {
+$job->tags()->attach($tags->random(2));
         });
-
-        $this->call([
-            EmployerSeeder::class,
-        ]);
     }
+
+    
 }

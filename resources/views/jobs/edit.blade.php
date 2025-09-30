@@ -9,20 +9,26 @@
         <div class="mb-4">
             <label class="block text-black">Title</label>
             <input type="text" name="title"
-                   value="{{ old('title', $job->title) }}" required
+                   value="{{ old('title', $job->title) }}" 
                    class="border rounded px-3 py-2 w-full text-black">
+                   @error('title')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">
             <label class="block text-black">Salary</label>
             <input type="text" name="salary"
-                   value="{{ old('salary', $job->salary) }}" required
+                   value="{{ old('salary', $job->salary) }}" 
                    class="border rounded px-3 py-2 w-full text-black">
+                   @error('salary')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4">
             <label class="block text-black">Employer</label>
-            <select name="employer_id" required
+            <select name="employer_id" 
                     class="border rounded px-3 py-2 w-full text-black">
                 @foreach($employers as $employer)
                     <option value="{{ $employer->id }}"
@@ -30,7 +36,11 @@
                         {{ $employer->name }}
                     </option>
                 @endforeach
+                
             </select>
+            @error('employer_id')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
         </div>
 
         <button type="submit"
